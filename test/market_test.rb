@@ -80,8 +80,26 @@ class MarketTest < Minitest::Test
   end
 
   def test_sell
+    @market.add_vendor(@vendor_1)
+    @market.add_vendor(@vendor_2)
+    @market.add_vendor(@vendor_3)
+
     refute @market.sell("Peaches", 200)
     refute @market.sell("Onions", 1)
-    assert @market.sell("Banana Nice Cream", 5)
+  end
+
+  def test_sell_reduces_stock
+    @market.add_vendor(@vendor_1)
+    @market.add_vendor(@vendor_2)
+    @market.add_vendor(@vendor_3)
+
+    @market.sell("Banana Nice Cream", 5)
+
+    assert_equal 45, @vendor_2.check_stock("Banana Nice Cream")
+
+    @market.sell("Peaches", 40)
+
+    assert_equal 0, @vendor_1.check_stock("Peaches")
+    assert_equal 60, @vendor_3.check_stock("Peaches")
   end
 end
