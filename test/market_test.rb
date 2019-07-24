@@ -78,4 +78,10 @@ class MarketTest < Minitest::Test
     }
     assert_equal expected, @market.total_inventory
   end
+
+  def test_sell
+    refute @market.sell("Peaches", 200)
+    refute @market.sell("Onions", 1)
+    assert @market.sell("Banana Nice Cream", 5)
+  end
 end
