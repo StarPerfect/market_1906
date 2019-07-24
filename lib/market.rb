@@ -37,4 +37,28 @@ class Market
     end
     master_inventory
   end
+
+  def sell(item, desired_amount)
+    if total_inventory.keys.include?(item) && total_inventory[item] > desired_amount
+      unless desired_amount == 0
+        @vendors.each do |vendor|
+          if vendor.inventory.keys.include?(item)
+            if vendor.inventory[item] > desired_amount
+              vendor.inventory[item] -= desired_amount
+              desired_amount = 0
+            elsif vendor.inventory[item] == desired_amount
+              vendor.inventory[item] = 0
+              desired_amount = 0
+            else
+              desired_amount -= vendor.inventory[item]
+              vendor.inventory[item] = 0
+            end
+          end
+        end
+      end
+      return true
+    else
+      return false
+    end
+  end
 end
